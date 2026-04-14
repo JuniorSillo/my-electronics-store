@@ -1,0 +1,104 @@
+{% assign compare_products = current_collection.products | slice: 0, 3 %}
+
+{% if compare_products.size > 1 %}
+  <section class="product-compare-specs">
+    <style>
+      .product-compare-specs {
+        margin-top: 3rem;
+        padding: 2rem;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 1.6rem;
+        background: #fff;
+      }
+
+      .product-compare-specs__table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .product-compare-specs__table th,
+      .product-compare-specs__table td {
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        padding: 1rem;
+        text-align: left;
+      }
+
+      .product-compare-specs__best {
+        background: #c6f6d5;
+        font-weight: 700;
+      }
+    </style>
+
+    <h3>Quick Compare</h3>
+
+    <table class="product-compare-specs__table">
+      <thead>
+        <tr>
+          <th>Specification</th>
+          {% for p in compare_products %}
+            <th>{{ p.title }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Warranty</td>
+          {% assign max_warranty = 0 %}
+          {% for p in compare_products %}
+            {% assign warranty_val = p.metafields.custom.warranty_months.value | default: 0 %}
+            {% if warranty_val > max_warranty %}
+              {% assign max_warranty = warranty_val %}
+            {% endif %}
+          {% endfor %}
+          {% for p in compare_products %}
+            {% assign warranty_val = p.metafields.custom.warranty_months.value %}
+            <td{% if warranty_val == max_warranty and warranty_val != blank %} class="product-compare-specs__best"{% endif %}>
+              {% if warranty_val %}{{ warranty_val }} months{% else %}—{% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <td>Energy</td>
+          {% for p in compare_products %}
+            <td>
+              {% if p.metafields.custom.energy_rating.value %}
+                {{ p.metafields.custom.energy_rating.value }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <td>Year</td>
+          {% for p in compare_products %}
+            <td>
+              {% if p.metafields.custom.release_year.value %}
+                {{ p.metafields.custom.release_year.value }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <td>Refurbished</td>
+          {% for p in compare_products %}
+            <td>
+              {% if p.metafields.custom.is_refurbished.value == true %}
+                Yes
+              {% elsif p.metafields.custom.is_refurbished.value == false %}
+                No
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </section>
+{% endif %}

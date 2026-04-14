@@ -290,9 +290,9 @@
       "blocks": {
         "collection_card_qxaY8M": {
           "type": "collection_card",
+          "source": "{{ metaobjects[\"shopify--mouse-trackball-features\"][\"scroll-wheel\"] }}",
           "settings": {
-            "collection": "",
-            "button_text": "Shop Now"
+            "button_text": "{{ metaobjects[\"shopify--mouse-trackball-features\"][\"scroll-wheel\"].label.value }}{{ block.settings.collection.title }}"
           }
         },
         "collection_card_4iwBAV": {

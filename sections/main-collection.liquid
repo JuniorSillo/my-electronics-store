@@ -42,6 +42,8 @@
       results_size: collection.products_count
     %}
 
+    {% render 'product-compare-specs' %}
+
     {% assign products_per_page = 24 %}
 
     {% if section.settings.enable_infinite_scroll == false %}

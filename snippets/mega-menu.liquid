@@ -1,0 +1,198 @@
+<nav class="custom-mega-menu" aria-label="Main navigation">
+  <ul class="custom-mega-menu__list" role="list">
+    {% for link in linklists['main-menu'].links %}
+      <li class="custom-mega-menu__item{% if link.links.size > 0 %} has-dropdown{% endif %}">
+        <a
+          href="{{ link.url }}"
+          class="custom-mega-menu__link{% if link.active or link.child_active %} is-active{% endif %}"
+        >
+          {{ link.title }}
+        </a>
+
+        {% if link.links.size > 0 %}
+          <div class="custom-mega-menu__dropdown{% if link.links.size > 4 %} custom-mega-menu__dropdown--wide{% endif %}">
+            <div class="custom-mega-menu__dropdown-content{% if link.links.size > 4 %} custom-mega-menu__dropdown-content--grid{% endif %}">
+              <div class="custom-mega-menu__nav-columns{% if link.links.size > 4 %} custom-mega-menu__nav-columns--two{% endif %}">
+                {% for child_link in link.links %}
+                  <a
+                    href="{{ child_link.url }}"
+                    class="custom-mega-menu__child-link{% if child_link.active or child_link.child_active %} is-active{% endif %}"
+                  >
+                    {{ child_link.title }}
+                  </a>
+                {% endfor %}
+              </div>
+
+              {% if link.handle == 'computers' %}
+                {% assign featured_product = collections[link.handle].products.first %}
+                {% if featured_product %}
+                  <div class="custom-mega-menu__featured-product">
+                    {% if featured_product.featured_image %}
+                      <a href="{{ featured_product.url }}" class="custom-mega-menu__featured-image-link">
+                        <img
+                          src="{{ featured_product.featured_image | image_url: width: 320 }}"
+                          alt="{{ featured_product.featured_image.alt | default: featured_product.title }}"
+                          width="320"
+                          height="240"
+                          loading="lazy"
+                          class="custom-mega-menu__featured-image"
+                        >
+                      </a>
+                    {% endif %}
+
+                    <p class="custom-mega-menu__featured-label">Featured Product</p>
+                    <a href="{{ featured_product.url }}" class="custom-mega-menu__featured-title">
+                      {{ featured_product.title }}
+                    </a>
+                    <p class="custom-mega-menu__featured-price">
+                      {{ featured_product.price | money }}
+                    </p>
+                    <a href="{{ featured_product.url }}" class="custom-mega-menu__featured-button">
+                      Shop Now
+                    </a>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<style>
+  .custom-mega-menu {
+    display: block;
+    position: relative;
+  }
+
+  .custom-mega-menu__list {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .custom-mega-menu__item {
+    position: relative;
+  }
+
+  .custom-mega-menu__link,
+  .custom-mega-menu__child-link,
+  .custom-mega-menu__featured-title {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .custom-mega-menu__link {
+    display: inline-block;
+    padding: 1rem 0.4rem;
+    font-weight: 500;
+  }
+
+  .custom-mega-menu__link.is-active,
+  .custom-mega-menu__child-link.is-active {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .custom-mega-menu__dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 24rem;
+    background: rgb(var(--color-base-background-1));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border-radius: 1.2rem;
+    padding: 1.6rem;
+    z-index: 20;
+  }
+
+  .custom-mega-menu__dropdown--wide {
+    min-width: 56rem;
+  }
+
+  .custom-mega-menu__item:hover > .custom-mega-menu__dropdown {
+    display: block;
+  }
+
+  .custom-mega-menu__dropdown-content {
+    display: block;
+  }
+
+  .custom-mega-menu__dropdown-content--grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .custom-mega-menu__nav-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .custom-mega-menu__nav-columns--two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2rem;
+  }
+
+  .custom-mega-menu__child-link {
+    display: block;
+    padding: 0.2rem 0;
+  }
+
+  .custom-mega-menu__featured-product {
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    padding-left: 2rem;
+  }
+
+  .custom-mega-menu__featured-image {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .custom-mega-menu__featured-label {
+    margin: 0 0 0.6rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+
+  .custom-mega-menu__featured-title {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .custom-mega-menu__featured-price {
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .custom-mega-menu__featured-button {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.8rem;
+    text-decoration: none;
+    background: #111827;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .custom-mega-menu {
+      display: none;
+    }
+  }
+</style>

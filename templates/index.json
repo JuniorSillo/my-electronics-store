@@ -292,14 +292,14 @@
           "type": "collection_card",
           "settings": {
             "collection": "premium-laptops",
-            "button_text": "Shop Now"
+            "button_text": "Shop Now {{ block.settings.collection.title }}"
           }
         },
         "collection_card_4iwBAV": {
           "type": "collection_card",
           "settings": {
             "collection": "portable-tech",
-            "button_text": "Shop Now{{ block.settings.collection.title }}"
+            "button_text": "Shop Now {{ block.settings.collection.title }}"
           }
         },
         "collection_card_PNBV3b": {

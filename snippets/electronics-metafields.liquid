@@ -1,5 +1,6 @@
 {% assign has_warranty = product.metafields.custom.warranty_months.value %}
 {% assign has_terms = product.metafields.custom.warranty_terms.value %}
+{% assign has_spec = product.metafields.custom.spec_sheet.value %}
 {% assign has_energy = product.metafields.custom.energy_rating.value %}
 {% assign has_year = product.metafields.custom.release_year.value %}
 {% assign is_refurbished = product.metafields.custom.is_refurbished.value %}
@@ -25,7 +26,7 @@
     {% assign energy_label = 'Below Average' %}
 {% endcase %}
 
-{% if has_warranty or has_terms or product.metafields.custom.spec_sheet != blank or has_energy or has_year or is_refurbished %}
+{% if has_warranty or has_terms or has_spec or has_energy or has_year or is_refurbished %}
   <section class="electronics-metafields">
     <style>
       .electronics-metafields {
@@ -87,7 +88,6 @@
         margin-top: 0.4rem;
         text-decoration: none;
         font-weight: 600;
-        color: #2563eb;
       }
 
       .electronics-metafields__download:hover {
@@ -120,7 +120,7 @@
         {% if has_warranty %}
           <tr>
             <td>Warranty</td>
-            <td>{{ has_warranty }} months</td>
+            <td>{{ product.metafields.custom.warranty_months.value }} months</td>
           </tr>
         {% endif %}
 
@@ -146,7 +146,7 @@
           </tr>
         {% endif %}
 
-        {% if product.metafields.custom.spec_sheet != blank %}
+        {% if has_spec %}
           <tr>
             <td>Technical Documentation</td>
             <td>

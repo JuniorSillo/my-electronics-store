@@ -288,30 +288,30 @@
     "featured_collections_grid_bWGzAW": {
       "type": "featured-collections-grid",
       "blocks": {
-        "collection_card_qxaY8M": {
+        "collection_card_TJCQRQ": {
           "type": "collection_card",
-          "source": "{{ metaobjects[\"shopify--mouse-trackball-features\"][\"scroll-wheel\"] }}",
           "settings": {
-            "button_text": "{{ metaobjects[\"shopify--mouse-trackball-features\"][\"scroll-wheel\"].label.value }}{{ block.settings.collection.title }}"
+            "collection": "premium-laptops",
+            "button_text": "Shop Now"
           }
         },
         "collection_card_4iwBAV": {
           "type": "collection_card",
           "settings": {
-            "collection": "",
-            "button_text": "Shop Now"
+            "collection": "portable-tech",
+            "button_text": "Shop Now{{ block.settings.collection.title }}"
           }
         },
         "collection_card_PNBV3b": {
           "type": "collection_card",
           "settings": {
-            "collection": "",
+            "collection": "budget-tech-under-r1-000",
             "button_text": "Shop Now"
           }
         }
       },
       "block_order": [
-        "collection_card_qxaY8M",
+        "collection_card_TJCQRQ",
         "collection_card_4iwBAV",
         "collection_card_PNBV3b"
       ],

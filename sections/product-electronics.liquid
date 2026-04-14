@@ -1,0 +1,287 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+{% assign min_price = product.variants[0].price %}
+{% assign max_price = product.variants[0].price %}
+{% for variant in product.variants %}
+  {% if variant.price < min_price %}
+    {% assign min_price = variant.price %}
+  {% endif %}
+  {% if variant.price > max_price %}
+    {% assign max_price = variant.price %}
+  {% endif %}
+{% endfor %}
+
+{% assign show_high_capacity = false %}
+{% assign show_pro_performance = false %}
+{% assign show_all_day_battery = false %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'spec:' %}
+    {% assign parts = tag | split: ':' %}
+    {% if parts.size >= 3 %}
+      {% assign spec_name = parts[1] | downcase %}
+      {% assign spec_value = parts[2] %}
+
+      {% if spec_name == 'storage' %}
+        {% if spec_value contains '1TB' or spec_value contains '2TB' %}
+          {% assign show_high_capacity = true %}
+        {% endif %}
+      {% endif %}
+
+      {% if spec_name == 'ram' %}
+        {% if spec_value contains '32GB' or spec_value contains '64GB' %}
+          {% assign show_pro_performance = true %}
+        {% endif %}
+      {% endif %}
+
+      {% if spec_name == 'battery' %}
+        {% if spec_value contains '18' or spec_value contains '20' or spec_value contains '24' %}
+          {% assign show_all_day_battery = true %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+<section class="page-width" style="padding-top: 32px; padding-bottom: 32px;">
+  <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items:start;">
+    <div>
+      {% if product.featured_image %}
+        <div style="border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; margin-bottom:16px;">
+          <img
+            src="{{ product.featured_image | image_url: width: 600 }}"
+            alt="{{ product.featured_image.alt | default: product.title }}"
+            width="600"
+            height="600"
+            style="width:100%; height:auto; display:block;"
+          >
+        </div>
+      {% endif %}
+
+      {% if product.images.size > 1 %}
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+          {% for image in product.images %}
+            <div style="border:1px solid #e5e7eb; border-radius:12px; overflow:hidden;">
+              <img
+                src="{{ image | image_url: width: 200 }}"
+                alt="{{ image.alt | default: product.title }}"
+                loading="lazy"
+                width="200"
+                height="200"
+                style="width:100%; height:auto; display:block;"
+              >
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        {% if product.compare_at_price > product.price %}
+          {% assign savings = product.compare_at_price | minus: product.price %}
+          {% assign discount_percent = savings | times: 100 | divided_by: product.compare_at_price | round %}
+          <span style="background:#dc2626; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            SALE — Save {{ discount_percent }}%
+          </span>
+        {% endif %}
+
+        {% if product.tags contains 'new-arrival' %}
+          <span style="background:#2563eb; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            New Arrival
+          </span>
+        {% endif %}
+
+        {% if product.tags contains 'best-seller' %}
+          <span style="background:#16a34a; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            Best Seller
+          </span>
+        {% endif %}
+
+        {% unless product.available %}
+          <span style="background:#6b7280; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            Sold Out
+          </span>
+        {% endunless %}
+
+        {% if show_high_capacity %}
+          <span style="background:#111827; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            High Capacity
+          </span>
+        {% endif %}
+
+        {% if show_pro_performance %}
+          <span style="background:#7c3aed; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            Pro Performance
+          </span>
+        {% endif %}
+
+        {% if show_all_day_battery %}
+          <span style="background:#0891b2; color:white; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+            All-Day Battery
+          </span>
+        {% endif %}
+      </div>
+
+      <p style="margin:0 0 6px 0; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:#6b7280;">
+        {{ product.vendor | upcase }}
+      </p>
+
+      <h1 style="margin:0 0 8px 0; font-size:36px; line-height:1.1;">
+        {{ product.title }}
+      </h1>
+
+      <p style="margin:0 0 8px 0; color:#4b5563;">
+        Product type: {{ product.type }}
+      </p>
+
+      <p style="margin:0 0 16px 0; color:#4b5563;">
+        Added on {{ product.created_at | date: "%B %d, %Y" }}
+      </p>
+
+      <div style="margin-bottom:20px;">
+        {% if min_price == max_price %}
+          <p style="font-size:28px; font-weight:700; margin:0;">
+            {{ product.price | money }}
+          </p>
+        {% else %}
+          <p style="font-size:28px; font-weight:700; margin:0;">
+            From {{ min_price | money }} — {{ max_price | money }}
+          </p>
+        {% endif %}
+
+        {% if product.compare_at_price > product.price %}
+          <p style="margin:6px 0 0 0; color:#6b7280; text-decoration:line-through;">
+            {{ product.compare_at_price | money }}
+          </p>
+        {% endif %}
+      </div>
+
+      <div style="border:1px solid #e5e7eb; border-radius:16px; padding:16px; margin-bottom:20px; background:#f9fafb;">
+        <p style="margin:0 0 8px 0; font-weight:700;">Quick overview</p>
+        <p style="margin:0; color:#374151;">
+          {{ product.description | strip_html | truncate: 120 }}
+        </p>
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <h3 style="margin-bottom:10px;">Full Description</h3>
+        <div style="color:#374151;">
+          {{ product.description }}
+        </div>
+      </div>
+
+      {% if section.settings.show_specs %}
+        <div style="margin-bottom:24px;">
+          <h3 style="margin-bottom:12px;">{{ section.settings.specs_heading }}</h3>
+          <table style="width:100%; border-collapse:collapse; border:1px solid #e5e7eb;">
+            <tbody>
+              {% for tag in product.tags %}
+                {% if tag contains 'spec:' %}
+                  {% assign parts = tag | split: ':' %}
+                  {% if parts.size >= 3 %}
+                    <tr>
+                      <td style="padding:10px; border-bottom:1px solid #e5e7eb; font-weight:600; width:40%;">
+                        {{ parts[1] }}
+                      </td>
+                      <td style="padding:10px; border-bottom:1px solid #e5e7eb;">
+                        {{ parts[2] }}
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      {% form 'product', product %}
+        <div style="margin-bottom:16px;">
+          <p style="font-weight:700; margin-bottom:8px;">
+            {{ product.variants | size }} configurations available
+          </p>
+
+          {% for option in product.options_with_values %}
+            <div style="margin-bottom:12px;">
+              <label style="display:block; margin-bottom:6px; font-weight:600;">
+                {{ option.name }}
+              </label>
+              <select style="width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:10px;">
+                {% for value in option.values %}
+                  <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        <button
+          type="submit"
+          style="width:100%; padding:14px 18px; border:none; border-radius:12px; font-weight:700; cursor:pointer; background:#111827; color:white;"
+        >
+          {% if product.available %}
+            Add to Cart — {{ current_variant.price | money }}
+          {% else %}
+            Sold Out
+          {% endif %}
+        </button>
+      {% endform %}
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <h3 style="margin-bottom:12px;">Variant Details</h3>
+    <table style="width:100%; border-collapse:collapse; border:1px solid #e5e7eb;">
+      <thead>
+        <tr style="background:#f9fafb;">
+          <th style="text-align:left; padding:10px; border-bottom:1px solid #e5e7eb;">Variant</th>
+          <th style="text-align:left; padding:10px; border-bottom:1px solid #e5e7eb;">SKU</th>
+          <th style="text-align:left; padding:10px; border-bottom:1px solid #e5e7eb;">Price</th>
+          <th style="text-align:left; padding:10px; border-bottom:1px solid #e5e7eb;">Stock status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for variant in product.variants %}
+          <tr>
+            <td style="padding:10px; border-bottom:1px solid #e5e7eb;">{{ variant.title }}</td>
+            <td style="padding:10px; border-bottom:1px solid #e5e7eb;">{{ variant.sku | default: 'N/A' }}</td>
+            <td style="padding:10px; border-bottom:1px solid #e5e7eb;">{{ variant.price | money }}</td>
+            <td style="padding:10px; border-bottom:1px solid #e5e7eb;">
+              {% if variant.available %}In Stock{% else %}Sold Out{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Electronics Product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_specs",
+      "label": "Show specifications table",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "specs_heading",
+      "label": "Specs section heading",
+      "default": "Technical Specifications"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Electronics Product"
+    }
+  ]
+}
+{% endschema %}

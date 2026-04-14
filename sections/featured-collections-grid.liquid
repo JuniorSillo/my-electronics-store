@@ -1,4 +1,4 @@
-<section class="featured-collections-grid section-{{ section.id }}">
+{% comment %} <section class="featured-collections-grid section-{{ section.id }}">
   <div class="page-width">
     {% if section.settings.heading != blank %}
       <h2 class="featured-collections-grid__heading">{{ section.settings.heading }}</h2>
@@ -115,6 +115,245 @@
     color: #fff;
     text-decoration: none;
     font-weight: 600;
+  }
+
+  @media (min-width: 600px) {
+    .featured-collections-grid__cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .featured-collections-grid__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Collection"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Explore our top consumer electronics categories"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        { "type": "collection_card" },
+        { "type": "collection_card" },
+        { "type": "collection_card" }
+      ]
+    }
+  ]
+}
+{% endschema %} {% endcomment %}
+
+
+<section class="featured-collections-grid section-{{ section.id }}">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="featured-collections-grid__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <p class="featured-collections-grid__subheading">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+    <div class="featured-collections-grid__cards">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          {% assign chosen_collection = block.settings.collection %}
+
+          <article class="featured-collections-grid__card" {{ block.shopify_attributes }}>
+            {% if chosen_collection != blank %}
+              {% assign fallback_product = chosen_collection.products.first %}
+
+              <a href="{{ chosen_collection.url }}" class="featured-collections-grid__image-link">
+                {% if chosen_collection.image %}
+                  <img
+                    src="{{ chosen_collection.image | image_url: width: 600 }}"
+                    alt="{{ chosen_collection.image.alt | default: chosen_collection.title }}"
+                    width="600"
+                    height="420"
+                    loading="lazy"
+                    class="featured-collections-grid__image"
+                  >
+                {% elsif fallback_product.featured_image %}
+                  <img
+                    src="{{ fallback_product.featured_image | image_url: width: 600 }}"
+                    alt="{{ fallback_product.featured_image.alt | default: chosen_collection.title }}"
+                    width="600"
+                    height="420"
+                    loading="lazy"
+                    class="featured-collections-grid__image"
+                  >
+                {% else %}
+                  <div class="featured-collections-grid__image featured-collections-grid__image--placeholder">
+                    <span>No image available</span>
+                  </div>
+                {% endif %}
+              </a>
+
+              <div class="featured-collections-grid__content">
+                <h3 class="featured-collections-grid__title">
+                  <a href="{{ chosen_collection.url }}">{{ chosen_collection.title }}</a>
+                </h3>
+
+                <p class="featured-collections-grid__count">
+                  {{ chosen_collection.products_count }} products
+                </p>
+
+                <a href="{{ chosen_collection.url }}" class="featured-collections-grid__button">
+                  {{ block.settings.button_text | default: 'Shop Now' }}
+                </a>
+              </div>
+            {% else %}
+              <div class="featured-collections-grid__image featured-collections-grid__image--placeholder">
+                <span>Select a collection</span>
+              </div>
+
+              <div class="featured-collections-grid__content">
+                <h3 class="featured-collections-grid__title">Collection card</h3>
+                <p class="featured-collections-grid__count">
+                  Choose a collection in the Theme Editor to display products here.
+                </p>
+                <span class="featured-collections-grid__button featured-collections-grid__button--disabled">
+                  {{ block.settings.button_text | default: 'Shop Now' }}
+                </span>
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      {% else %}
+        <article class="featured-collections-grid__card featured-collections-grid__card--empty">
+          <div class="featured-collections-grid__image featured-collections-grid__image--placeholder">
+            <span>Add collection cards</span>
+          </div>
+          <div class="featured-collections-grid__content">
+            <h3 class="featured-collections-grid__title">No blocks added yet</h3>
+            <p class="featured-collections-grid__count">
+              Add collection-card blocks in the Theme Editor to populate this section.
+            </p>
+            <span class="featured-collections-grid__button featured-collections-grid__button--disabled">
+              Shop Now
+            </span>
+          </div>
+        </article>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-collections-grid {
+    padding: 4rem 0;
+  }
+
+  .featured-collections-grid__heading {
+    margin: 0 0 1rem;
+  }
+
+  .featured-collections-grid__subheading {
+    margin: 0 0 2rem;
+    opacity: 0.75;
+  }
+
+  .featured-collections-grid__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .featured-collections-grid__card {
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 1.6rem;
+    background: rgb(var(--color-base-background-1));
+  }
+
+  .featured-collections-grid__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .featured-collections-grid__image--placeholder {
+    min-height: 24rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .featured-collections-grid__content {
+    padding: 1.6rem;
+  }
+
+  .featured-collections-grid__title {
+    margin: 0 0 0.8rem;
+  }
+
+  .featured-collections-grid__title a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .featured-collections-grid__count {
+    margin: 0 0 1.2rem;
+    opacity: 0.8;
+  }
+
+  .featured-collections-grid__button {
+    display: inline-block;
+    padding: 1rem 1.4rem;
+    border-radius: 0.8rem;
+    background: #111827;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .featured-collections-grid__button--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   @media (min-width: 600px) {

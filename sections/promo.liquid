@@ -1,0 +1,71 @@
+{{ 'promo.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'heavy-lib.js' | asset_url }}" defer></script>
+<script src="{{ 'promo.js' | asset_url }}" defer></script>
+
+<section class="promo-section" aria-labelledby="promo-heading">
+  <div class="page-width promo-section__wrapper">
+    <div class="promo-section__content">
+      <p class="promo-section__eyebrow">Limited Time Offer</p>
+      <h2 id="promo-heading" class="promo-section__heading">
+        Upgrade Your Tech Setup with Exclusive Deals
+      </h2>
+      <p class="promo-section__text">
+        Discover premium consumer electronics, accessories, and performance gear with
+        fast delivery and trusted support.
+      </p>
+
+      <a href="/collections/deals" class="promo-section__cta">
+        Explore Current Technology Deals
+      </a>
+
+      <button
+        type="button"
+        class="promo-section__icon-button"
+        aria-label="Open promotional offer details"
+        onclick="doPromo()"
+      >
+        ⓘ
+      </button>
+    </div>
+
+    <div class="promo-section__media">
+      <img
+        src="{{ 'promo-banner.jpg' | asset_url }}"
+        alt="Featured consumer electronics including a laptop, headphones, and smartwatch on promotion"
+        width="800"
+        height="500"
+        loading="lazy"
+        class="promo-section__image"
+      >
+    </div>
+  </div>
+
+  <div class="page-width promo-section__newsletter">
+    <h3 class="promo-section__subheading">Get future offers first</h3>
+
+    <form class="promo-section__form" action="/contact#contact_form" method="post" accept-charset="UTF-8">
+      <input type="hidden" name="form_type" value="customer">
+      <input type="hidden" name="utf8" value="✓">
+
+      <div class="promo-section__field">
+        <label for="PromoEmail" class="promo-section__label">Email address</label>
+        <input
+          id="PromoEmail"
+          type="email"
+          name="contact[email]"
+          class="promo-section__input"
+          placeholder="Enter your email address"
+          aria-describedby="PromoEmailHelp"
+          required
+        >
+        <p id="PromoEmailHelp" class="promo-section__help">
+          Subscribe to receive updates about new promotions and featured products.
+        </p>
+      </div>
+
+      <button type="submit" class="promo-section__submit">
+        Subscribe for Tech Offers
+      </button>
+    </form>
+  </div>
+</section>

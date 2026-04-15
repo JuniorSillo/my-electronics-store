@@ -14,7 +14,7 @@
         fast delivery and trusted support.
       </p>
 
-      <a href="/collections/deals" class="promo-section__cta">
+      <a href="{{ routes.collections_url }}/deals" class="promo-section__cta">
         Explore Current Technology Deals
       </a>
 
@@ -69,3 +69,17 @@
     </form>
   </div>
 </section>
+
+{% schema %}
+{
+  "name": "Promo Section",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Promo Section"
+    }
+  ]
+}
+{% endschema %}

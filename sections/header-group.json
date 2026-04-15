@@ -46,6 +46,7 @@
         "announcement_BxgCk9",
         "announcement_8P3DQG"
       ],
+      "disabled": true,
       "name": "t:names.announcement_bar",
       "settings": {
         "speed": 5,
@@ -92,6 +93,7 @@
           "blocks": {}
         }
       },
+      "disabled": true,
       "settings": {
         "logo_position": "left",
         "menu_position": "left",

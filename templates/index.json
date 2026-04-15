@@ -320,11 +320,17 @@
         "heading": "Shop by Collection",
         "subheading": "Explore our top consumer electronics categories"
       }
+    },
+    "promo_VDr6my": {
+      "type": "promo",
+      "name": "Promo Section",
+      "settings": {}
     }
   },
   "order": [
     "hero_jVaWmY",
     "product_list_fa6P9H",
-    "featured_collections_grid_bWGzAW"
+    "featured_collections_grid_bWGzAW",
+    "promo_VDr6my"
   ]
 }

@@ -58,7 +58,6 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
-      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "video",
@@ -265,7 +264,6 @@
           ]
         }
       },
-      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
@@ -317,7 +315,6 @@
         "collection_card_4iwBAV",
         "collection_card_PNBV3b"
       ],
-      "disabled": true,
       "name": "Featured Collections",
       "settings": {
         "heading": "Shop by Collection",

@@ -1,0 +1,174 @@
+{% assign has_warranty = product.metafields.custom.warranty_months.value %}
+{% assign has_terms = product.metafields.custom.warranty_terms.value %}
+{% assign has_spec = product.metafields.custom.tech_spec_sheet.value %}
+{% assign has_energy = product.metafields.custom.energy_rating.value %}
+{% assign has_year = product.metafields.custom.release_year.value %}
+{% assign is_refurbished = product.metafields.custom.is_refurbished.value %}
+
+{% assign energy_color = '#e53e3e' %}
+{% assign energy_label = 'Below Average' %}
+
+{% case has_energy %}
+  {% when 'A++' %}
+    {% assign energy_color = '#38a169' %}
+    {% assign energy_label = 'Excellent Efficiency' %}
+  {% when 'A+' %}
+    {% assign energy_color = '#68d391' %}
+    {% assign energy_label = 'Very Good Efficiency' %}
+  {% when 'A' %}
+    {% assign energy_color = '#ecc94b' %}
+    {% assign energy_label = 'Good Efficiency' %}
+  {% when 'B' %}
+    {% assign energy_color = '#ed8936' %}
+    {% assign energy_label = 'Average Efficiency' %}
+  {% else %}
+    {% assign energy_color = '#e53e3e' %}
+    {% assign energy_label = 'Below Average' %}
+{% endcase %}
+
+{% if has_warranty or has_terms or has_spec or has_energy or has_year or is_refurbished %}
+  <section class="electronics-metafields">
+    <style>
+      .electronics-metafields {
+        margin-top: 2.4rem;
+        padding: 2rem;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 1.6rem;
+        background: #fff;
+      }
+
+      .electronics-metafields__heading {
+        margin: 0 0 1.6rem;
+        font-size: 2rem;
+      }
+
+      .electronics-metafields__badge {
+        display: inline-block;
+        margin-bottom: 1.2rem;
+        background: #ed8936;
+        color: #fff;
+        padding: 0.4rem 1.2rem;
+        border-radius: 0.6rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      .electronics-metafields__table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.6rem;
+      }
+
+      .electronics-metafields__table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        vertical-align: top;
+      }
+
+      .electronics-metafields__table td:first-child {
+        width: 220px;
+        font-weight: 700;
+      }
+
+      .electronics-metafields__energy {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .electronics-metafields__energy-swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        display: inline-block;
+      }
+
+      .electronics-metafields__download {
+        display: inline-block;
+        margin-top: 0.4rem;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .electronics-metafields__download:hover {
+        text-decoration: underline;
+      }
+
+      .electronics-metafields__terms {
+        margin-top: 2rem;
+        padding: 1.6rem;
+        border-radius: 1.2rem;
+        background: #f8fafc;
+      }
+
+      .electronics-metafields__terms h4 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+    </style>
+
+    {% if is_refurbished == true %}
+      <span class="electronics-metafields__badge">
+        Certified Refurbished
+      </span>
+    {% endif %}
+
+    <h3 class="electronics-metafields__heading">Product Specifications & Details</h3>
+
+    <table class="electronics-metafields__table">
+      <tbody>
+        {% if has_warranty %}
+          <tr>
+            <td>Warranty</td>
+            <td>{{ product.metafields.custom.warranty_months.value }} months</td>
+          </tr>
+        {% endif %}
+
+        {% if has_energy %}
+          <tr>
+            <td>Energy Rating</td>
+            <td>
+              <div class="electronics-metafields__energy">
+                <span
+                  class="electronics-metafields__energy-swatch"
+                  style="background: {{ energy_color }};"
+                ></span>
+                <span>{{ has_energy }} — {{ energy_label }}</span>
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+
+        {% if has_year %}
+          <tr>
+            <td>Release Year</td>
+            <td>{{ has_year }}</td>
+          </tr>
+        {% endif %}
+
+        {% if has_spec %}
+          <tr>
+            <td>Technical Documentation</td>
+            <td>
+              <a
+                href="{{ product.metafields.custom.spec_sheet.value.url }}"
+                target="_blank"
+                download
+                class="electronics-metafields__download"
+              >
+                Download Specification Sheet (PDF)
+              </a>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    {% if has_terms %}
+      <div class="electronics-metafields__terms">
+        <h4>Warranty Terms</h4>
+        {{ product.metafields.custom.warranty_terms | metafield_tag }}
+      </div>
+    {% endif %}
+  </section>
+{% endif %}

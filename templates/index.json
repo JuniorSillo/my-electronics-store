@@ -58,6 +58,7 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "video",
@@ -264,6 +265,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
@@ -284,10 +286,54 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "featured_collections_grid_bWGzAW": {
+      "type": "featured-collections-grid",
+      "blocks": {
+        "collection_card_TJCQRQ": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "premium-laptops",
+            "button_text": "Shop Now {{ block.settings.collection.title }}"
+          }
+        },
+        "collection_card_4iwBAV": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "portable-tech",
+            "button_text": "Shop Now {{ block.settings.collection.title }}"
+          }
+        },
+        "collection_card_PNBV3b": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "budget-tech-under-r1-000",
+            "button_text": "Shop Now"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_TJCQRQ",
+        "collection_card_4iwBAV",
+        "collection_card_PNBV3b"
+      ],
+      "disabled": true,
+      "name": "Featured Collections",
+      "settings": {
+        "heading": "Shop by Collection",
+        "subheading": "Explore our top consumer electronics categories"
+      }
+    },
+    "promo_VDr6my": {
+      "type": "promo",
+      "name": "Promo Section",
+      "settings": {}
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "featured_collections_grid_bWGzAW",
+    "promo_VDr6my"
   ]
 }

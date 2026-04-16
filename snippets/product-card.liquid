@@ -34,7 +34,6 @@
   assign product_card_id = 'product-card-link-' | append: block.id | append: '-' | append: product.id
   assign product_card_gap_value = product_card_gap | default: block_settings.product_card_gap
 
-  # Logic to determine which variant URL to use (matching swatch selection logic)
   assign variant_to_link = product.selected_or_first_available_variant
 
   if settings.transition_to_main_product
@@ -51,6 +50,11 @@
   assign onboarding = false
   if product.id == empty or product == blank
     assign onboarding = true
+  endif
+
+  assign show_sale_badge = false
+  if settings.show_sale_badges and onboarding == false and product.compare_at_price > product.price
+    assign show_sale_badge = true
   endif
 %}
 
@@ -81,6 +85,7 @@
       {{ product.title }}
     </span>
   </a>
+
   <div
     class="
       product-card__content
@@ -97,6 +102,7 @@
       {% render 'layout-panel-style', settings: block_settings %}
       {% render 'spacing-style', settings: block_settings %}
       {% render 'gap-style', value: product_card_gap_value, name: 'product-card-gap' %}
+      border-radius: {{ settings.card_border_radius }}px;
       --quick-add-display: {% if has_quick_add %}flex{% else %}none{% endif %};
       --quick-add-mobile-display: {% if has_mobile_quick_add %}flex{% else %}none{% endif %};
       --quick-add-mobile-opacity: {% if has_mobile_quick_add %}1{% else %}0{% endif %};
@@ -106,6 +112,21 @@
       {% if block_settings.padding-block-end > 0 %}--zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7}}px);{% endif %}
     "
   >
+    {% if show_sale_badge %}
+      <div
+        class="product-card__custom-sale-badge"
+        style="background: {{ settings.sale_badge_color }};"
+      >
+        Sale
+      </div>
+    {% endif %}
+
+    {% if settings.show_vendor_on_cards and onboarding == false and product.vendor != blank %}
+      <p class="product-card__custom-vendor">
+        {{ product.vendor }}
+      </p>
+    {% endif %}
+
     {{ children }}
   </div>
 </product-card>
@@ -117,6 +138,33 @@
 
   .product-card__content slideshow-component {
     --cursor: pointer;
+  }
+
+  .product-card__content {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card__custom-sale-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 8px 10px;
+    border-radius: 999px;
+  }
+
+  .product-card__custom-vendor {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.75;
   }
 
   @media screen and (max-width: 749px) {

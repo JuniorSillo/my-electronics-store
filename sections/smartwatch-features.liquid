@@ -1,0 +1,221 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign water_rating = product.metafields.custom.water_resistance_rating.value %}
+{% assign technical_manual = product.metafields.custom.technical_manual %}
+
+<section class="smartwatch-features">
+  <style>
+    .smartwatch-features {
+      padding: 40px 0;
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .smartwatch-features__container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .smartwatch-features__image {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    .smartwatch-features__title {
+      margin: 0 0 12px;
+      font-size: 36px;
+      line-height: 1.1;
+    }
+
+    .smartwatch-features__price {
+      margin: 0 0 20px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .smartwatch-features__description {
+      margin: 0 0 24px;
+      color: #374151;
+      line-height: 1.7;
+    }
+
+    .smartwatch-features__variants {
+      margin: 0 0 24px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .smartwatch-features__variant-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .smartwatch-features__meta {
+      margin-top: 24px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      background: #f9fafb;
+    }
+
+    .smartwatch-features__meta h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .smartwatch-features__manual-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .smartwatch-features__manual-link:hover {
+      text-decoration: underline;
+    }
+
+    .smartwatch-features__form {
+      margin-top: 24px;
+    }
+
+    .smartwatch-features__label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .smartwatch-features__select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .smartwatch-features__button {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #111827;
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .smartwatch-features__button:hover,
+    .smartwatch-features__button:focus {
+      background: #000000;
+    }
+
+    @media screen and (max-width: 749px) {
+      .smartwatch-features__container {
+        grid-template-columns: 1fr;
+      }
+
+      .smartwatch-features__title {
+        font-size: 28px;
+      }
+    }
+  </style>
+
+  <div class="smartwatch-features__container">
+    <div>
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: 800 }}"
+          alt="{{ product.featured_image.alt | default: product.title }}"
+          width="800"
+          height="800"
+          loading="lazy"
+          class="smartwatch-features__image"
+        >
+      {% endif %}
+    </div>
+
+    <div>
+      <h1 class="smartwatch-features__title">{{ product.title }}</h1>
+
+      <p class="smartwatch-features__price">
+        {{ current_variant.price | money }}
+      </p>
+
+      <div class="smartwatch-features__description">
+        {{ product.description }}
+      </div>
+
+      <h3>Available Configurations</h3>
+      <ul class="smartwatch-features__variants">
+        {% for variant in product.variants %}
+          <li class="smartwatch-features__variant-item">
+            {{ variant.title }} — {{ variant.price | money }}
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% form 'product', product, class: 'smartwatch-features__form' %}
+        {% for option in product.options_with_values %}
+          <label class="smartwatch-features__label" for="Option-{{ forloop.index }}">
+            {{ option.name }}
+          </label>
+          <select
+            id="Option-{{ forloop.index }}"
+            class="smartwatch-features__select"
+            aria-label="{{ option.name }}"
+          >
+            {% for value in option.values %}
+              <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+          </select>
+        {% endfor %}
+
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        <button type="submit" class="smartwatch-features__button" aria-label="Add Pro Series Smartwatch to cart">
+          Add to Cart
+        </button>
+      {% endform %}
+
+      {% if water_rating or technical_manual != blank %}
+        <div class="smartwatch-features__meta">
+          <h3>Technical Details</h3>
+
+          {% if water_rating %}
+            <p><strong>Water Resistance Rating:</strong> {{ water_rating }}</p>
+          {% endif %}
+
+          {% if technical_manual != blank %}
+            <a
+              href="{{ product.metafields.custom.technical_manual.value.url }}"
+              target="_blank"
+              download
+              class="smartwatch-features__manual-link"
+            >
+              Download Technical Manual (PDF)
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Smartwatch Features",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Smartwatch Features"
+    }
+  ]
+}
+{% endschema %}
